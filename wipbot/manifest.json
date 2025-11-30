@@ -2,8 +2,8 @@
   "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
   "id": "wipbot",
   "name": "wipbot",
-  "author": "Catse",
-  "version": "1.20.0",
+  "author": "Danielduel",
+  "version": "1.21.0",
   "description": "",
   "gameVersion": "1.38.0",
   "dependsOn": {

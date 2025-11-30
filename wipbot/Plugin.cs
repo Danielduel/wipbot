@@ -63,7 +63,11 @@ namespace wipbot
     [NonNullable]
     public virtual List<string> RequestCodePrefixDownloadUrlPairs { get; set; } = [
       "0",
-      "https://wipbot.com/wips/%s.zip"
+      "https://wipbot.com/wips/%s.zip",
+      "8",
+      "https://wip.hawk.quest/upload/%s.zip",
+      "9",
+      "https://thnght.pro/upload/%s.zip"
     ];
     public virtual string RequestCodeCharacterWhitelist { get; set; } = "0123456789abcdefABCDEF";
 
@@ -221,6 +225,25 @@ namespace wipbot
       }
     }
 
+    public void MigrateConfig_4()
+    {
+      if (Config.Instance.ConfigVersion == 4) {
+        // Interoperability with Hawk domains!
+        var shouldMigrate = Config.Instance.RequestCodePrefixDownloadUrlPairs.Count == 2 &&
+          Config.Instance.RequestCodePrefixDownloadUrlPairs[0] == "0" &&
+          Config.Instance.RequestCodePrefixDownloadUrlPairs[1] == "https://wipbot.com/wips/%s.zip";
+
+        if (shouldMigrate) {
+          Config.Instance.RequestCodePrefixDownloadUrlPairs.Add("8");
+          Config.Instance.RequestCodePrefixDownloadUrlPairs.Add("https://wip.hawk.quest/upload/%s.zip");
+          Config.Instance.RequestCodePrefixDownloadUrlPairs.Add("9");
+          Config.Instance.RequestCodePrefixDownloadUrlPairs.Add("https://thnght.pro/upload/%s.zip");
+        }
+
+        Config.Instance.ConfigVersion = 5;
+      }
+    }
+
 
     [Init]
     public Plugin(IPALogger logger, IPA.Config.Config config)
@@ -232,6 +255,7 @@ namespace wipbot
       MigrateConfig_1();
       MigrateConfig_2();
       MigrateConfig_3();
+      MigrateConfig_4();
     }
 
     [OnStart]
